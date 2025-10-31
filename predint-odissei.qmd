@@ -18,6 +18,7 @@ bibliography: pred_int.bib
 ::: {.incremental}
 -   UQ is important in prediction settings
 -   e.g., when a package gets delivered the range of plausible values is more important than the prediction itself
+-   (verkiezing poll)
 -   This range is often expressed as the prediction interval
 :::
 
@@ -52,7 +53,7 @@ bibliography: pred_int.bib
 
 ::: {.fragment }
 $$
-y \pm t_{\alpha/2, n-p}\sqrt{\sigma^2(x^T(X^TX)^{-1}x)}
+y \pm t_{\alpha/2, n-p}\sqrt{\sigma^2(1+ x^T(X^TX)^{-1}x)}
 $$
 :::
 
@@ -72,7 +73,7 @@ $$ T =  \bar{U} + B + \frac{B}{m}$$
 with $\bar{U}$ = the within variance, $B$ = the between varience, and $m$ the number of imputations
 :::
 
-## Pooling the prediction intervals
+## Pooling the prediction intervals (skip deze)
 
 ::: {.fragment }
 Let's define the terms:
@@ -93,7 +94,13 @@ B =  \frac{1}{M} \sum_{m =1}^M (\hat{y_{m}} - \bar{Q})^2
 $$
 :::
 
-## Results
+
+## Results (marginal)
+
+- Split in lage/hoge r2
+- Split in lage/hoge rho
+
+## Results (conditional, ntrain = 500, miss = both)
 - A valid prediction interval should have 1-alpha coverage
 
 :::: {.columns}
@@ -113,6 +120,10 @@ $$
 ::::
 
 - The width of the prediction interval can show scale with the uncertainity in X
+
+## Implementation 
+
+
 
 ## Takeaway
 ::: {.incremental}
