@@ -376,6 +376,7 @@ Stef van Buuren
 <ul>
 <li class="fragment">UQ is important in prediction settings</li>
 <li class="fragment">e.g., when a package gets delivered the range of plausible values is more important than the prediction itself</li>
+<li class="fragment">(verkiezing poll)</li>
 <li class="fragment">This range is often expressed as the prediction interval</li>
 </ul>
 </div>
@@ -417,7 +418,7 @@ Stef van Buuren
 <h2>Prediction interval for OLS</h2>
 <div class="fragment">
 <p><span class="math display">\[
-y \pm t_{\alpha/2, n-p}\sqrt{\sigma^2(x^T(X^TX)^{-1}x)}
+y \pm t_{\alpha/2, n-p}\sqrt{\sigma^2(1+ x^T(X^TX)^{-1}x)}
 \]</span></p>
 </div>
 <div class="fragment">
@@ -435,8 +436,8 @@ y \pm t_{\alpha/2, n-p}\sqrt{\sigma^2(x^T(X^TX)^{-1}x)}
 <p>with <span class="math inline">\(\bar{U}\)</span> = the within variance, <span class="math inline">\(B\)</span> = the between varience, and <span class="math inline">\(m\)</span> the number of imputations</p>
 </div>
 </section>
-<section id="pooling-the-prediction-intervals" class="slide level2">
-<h2>Pooling the prediction intervals</h2>
+<section id="pooling-the-prediction-intervals-skip-deze" class="slide level2">
+<h2>Pooling the prediction intervals (skip deze)</h2>
 <div class="fragment">
 <p>Let’s define the terms: <span class="math display">\[
 \bar{U} = \frac{1}{M} \sum_{m =1}^M  \sqrt{ \sigma_m^2 * (1 + x^T_{m}(X_m^TX_m)^{-1}x_{m})}
@@ -453,8 +454,15 @@ B =  \frac{1}{M} \sum_{m =1}^M (\hat{y_{m}} - \bar{Q})^2
 \]</span></p>
 </div>
 </section>
-<section id="results" class="slide level2">
-<h2>Results</h2>
+<section id="results-marginal" class="slide level2">
+<h2>Results (marginal)</h2>
+<ul>
+<li class="fragment">Split in lage/hoge r2</li>
+<li class="fragment">Split in lage/hoge rho</li>
+</ul>
+</section>
+<section id="results-conditional-ntrain-500-miss-both" class="slide level2">
+<h2>Results (conditional, ntrain = 500, miss = both)</h2>
 <ul>
 <li class="fragment">A valid prediction interval should have 1-alpha coverage</li>
 </ul>
@@ -472,6 +480,9 @@ B =  \frac{1}{M} \sum_{m =1}^M (\hat{y_{m}} - \bar{Q})^2
 <ul>
 <li class="fragment">The width of the prediction interval can show scale with the uncertainity in X</li>
 </ul>
+</section>
+<section id="implementation" class="slide level2">
+<h2>Implementation</h2>
 </section>
 <section id="takeaway" class="slide level2">
 <h2>Takeaway</h2>
