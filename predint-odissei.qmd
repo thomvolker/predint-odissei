@@ -7,132 +7,165 @@ author:
   - name: "Stef van Buuren"
 format:
   revealjs:
-    logo: "universiteit-utrecht-logo.png"   
-    logo-position: top-right
-    incremental: true
+    theme: [C:/Users/5868777/surfdrive/Documents/slides-theme/website-theme/website-theme.scss]
+    logo: "universiteit-utrecht-logo.png"
+    incremental: false
 bibliography: pred_int.bib
 ---
 
-## Uncertainity quantification (UQ)
+## Uncertainty quantification
 
-::: {.incremental}
--   UQ is important in prediction settings
--   e.g., when a package gets delivered the range of plausible values is more important than the prediction itself
--   (verkiezing poll)
--   This range is often expressed as the prediction interval
+Proper uncertainty quantification is essential in prediction settings
+
+
+:::: {.columns}
+::: {.column width="55%"}
+- Expected grade
+- Election polling
+- Package delivery
+
 :::
 
-## Missing data 
-
-::: {.incremental}
--   Missing data complicates the story (MCAR, MAR, MNAR)
--   Modeling choices have to be made: Complete case analysis or Imputation
--   Imputation can further be divided in single (deterministic) and multiple (stochastic) imputation
--   It is well know that SI is not valid for inference tasks [@van_buuren_flexible_2018]
--   For prediction the point estimate can be unbiased with SI [@little_regression_1992], but the UQ is not valid [@zaffran_predictive_2024] 
+::: {.column width="45%"}
+![](Figures/postnl-bg.png)
 :::
+::::
 
+# Prediction interval
 
-## Setup 
-::: {style="font-size: 0.75em;"}
-::: {.incremental}
-- X values are generated for a Multivariate normal distribution
-- Y values are created based on a linear model with X
-- Missing data is induced in X following a MAR mechanism
-- The following pattern is used: 
-:::
-::: {.fragment }
-![](Figures/pattern.png){width=55%}
-:::
-::: {.incremental}
-- For SI Y is not in the imputation model, for MI it is 
-:::
-:::
-
-## Prediction interval for OLS
-
-::: {.fragment }
-$$
-y \pm t_{\alpha/2, n-p}\sqrt{\sigma^2(1+ x^T(X^TX)^{-1}x)}
-$$
-:::
-
-::: {.fragment }
-with $\sigma^2$ = residual variance, $x^T(X^TX)^{-1}x$ = place of x wrt X
-:::
-
-::: {.fragment }
-- Now we have multiple prediction intervals, which can be combined with Rubin's rules:
-:::
-
-::: {.fragment }
-$$ T =  \bar{U} + B + \frac{B}{m}$$
-:::
-
-::: {.fragment }
-with $\bar{U}$ = the within variance, $B$ = the between varience, and $m$ the number of imputations
-:::
-
-## Pooling the prediction intervals (skip deze)
-
-::: {.fragment }
-Let's define the terms:
-$$
- \bar{U} = \frac{1}{M} \sum_{m =1}^M  \sqrt{ \sigma_m^2 * (1 + x^T_{m}(X_m^TX_m)^{-1}x_{m})}
-$$
-:::
-
-::: {.fragment }
-$$
- \bar{Q} = \frac{1}{M} \sum_{m =1}^M \hat{y_{m}}
-$$
-:::
-
-::: {.fragment }
-$$
-B =  \frac{1}{M} \sum_{m =1}^M (\hat{y_{m}} - \bar{Q})^2
-$$
+::: {.emph}
+A range of values $[\hat y_l, \hat y_u]$ that cover the true value $y$ of unseen cases with probability $1-\alpha$
 :::
 
 
-## Results (marginal)
+## Missing data complicates prediction
 
-- Split in lage/hoge r2
-- Split in lage/hoge rho
+How to deal with observed predictors?
 
-## Results (conditional, ntrain = 500, miss = both)
-- A valid prediction interval should have 1-alpha coverage
+- Complete case analysis? No.
+- Imputation: single (deterministic) or multiple (stochastic)?
+  + __Single imputation:__ unbiased predictions [@little_regression_1992], but invalid uncertainty quantification [@van_buuren_flexible_2018; @zaffran_predictive_2024].
+  + __Multiple imputation:__ valid for inference, but how to use for prediction uncertainty?
+
+
+## Calculating prediction intervals
+
+<br><br>
+
+::::{.emph}
+:::{.emph-header}
+Prediction uncertainty^[Under standard linear regression assumptions, the prediction interval covers the true $y$ value with probability $1-\alpha$.]
+:::
+
+$U =$ Residual variance + model uncertainty
+::::
+
+
+
+## With missing data
+
+Additional assumption: imputation model is appropriate
+
+::::{.emph}
+:::{.emph-header}
+Prediction uncertainty with missing data^[Under standard linear regression assumptions, plus the assumption that the imputation model is appropriate, the prediction interval covers the true $y$ value with probability $1-\alpha$.]
+:::
+
+Residual variance + model uncertainty + imputation uncertainty^[Obtainable via Rubin's Rules [-@rubin_inference_1976]: $T = U + B(1 + 1/m)$, $U =$ residual variance + model uncertainty; $B(1+1/m) =$ imputation uncertainty.]
+::::
+
+## Evaluation (simulation)
+::::{.columns}
+
+:::{.column width = "40%"}
+Linear regression model: $y = X\beta + \varepsilon$
+
+---
+
+$X \sim MVN(0, \Sigma)$
+
+---
+
+MAR missingness in __train__, __test__ or __both__
+
+---
+
+:::
+
+:::{.column width="60%"}
+![](Figures/pattern.png){width="120%"}
+:::
+::::
+
+Varied __sample size__, __correlation__
+
+
+## Marginal coverage results
+
+![Marginal coverage (y-axis) for multiple and single imputation, depending on whether missingness occurs only in the training data, only in the test data, or in both, for different sizes of the training data.](Figures/marginal.png)
+
+## Conditional coverage results
 
 :::: {.columns}
 
 ::: {.column width="50%"}
 ::: {.fragment}
-![](Figures/ODISSEI_1.png){width=100%}
+![Conditional coverage (y-axis) for multiple and single imputation, per number of missing observations per record.](Figures/main2.png){width=100%}
 :::
 :::
 
 ::: {.column width="50%"}
 ::: {.fragment}
-![](Figures/ODISSEI_2.png){width=100%}
+![Conditional PI width (y-axis) for multiple and single imputation, per number of missing observations per record.](Figures/main3.png){width=100%}
 :::
 :::
 
 ::::
 
-- The width of the prediction interval can show scale with the uncertainity in X
+## {background-iframe="https://amices.org/mice/reference/predict_mi.html"}
 
-## Implementation 
+#
 
+:::{.emph}
+__Multiple imputation produces prediction intervals that yield nominal coverage and scale with imputation uncertainty.__
 
+- The approach is readily available in the `mice` package.
 
-## Takeaway
-::: {.incremental}
-- Other solutions are available using conformal prediction [@zaffran_predictive_2024, @zaffran_conformal_2023], but they only work for MCAR data and if the sample size is large
-- Our solution is implemented in the `mice` package as the *predict_mi* function
-- More research is needed to test our method beyond OLS
+- Other (conformal) approaches [e.g., @zaffran_conformal_2023; @zaffran_predictive_2024] assume MCAR and require very large samples.
+
+- More research is needed to test our method beyond linear regression.
+
 :::
+
+
+
 ## References
 
 ::: {#refs}
 
 :::
+
+
+## Prediction interval calculation
+
+Standard linear model prediction variance
+$$
+U = \hat \sigma^2 (1 + x^T (X^TX)^{-1} x)
+$$
+and prediction interval
+$$
+[\hat y - t_{\alpha/2, n-p}\sqrt U, \hat y + t_{\alpha/2, n-p}\sqrt U],
+$$
+based on a $t$-distribution with $n - p$ degrees of freedom.
+
+## Prediction intervals with missing data
+
+With missing data, the prediction variance equals
+$$
+T = \bar U + B(1 + 1/m),
+$$
+with $B = \text{var} [\hat y_j]$ over imputations $j = 1, \dots, m$. The prediction interval equals 
+$$
+[\bar {\hat y}_j - t_{\alpha/2, \nu}\sqrt T, \bar {\hat y}_j + t_{\alpha/2, \nu}\sqrt T],
+$$
+where $\bar {\hat y}_j = \sum_j \hat y_j$ and $\nu$ denotes the missing data degrees of freedom [@barnard_rubin_1999].
