@@ -7,8 +7,8 @@ author:
   - name: "Stef van Buuren"
 format:
   revealjs:
-    theme: [C:/Users/5868777/surfdrive/Documents/slides-theme/website-theme/website-theme.scss]
-    logo: "universiteit-utrecht-logo.png"
+    theme: website-theme.scss
+    logo: "https://github.com/thomvolker/slides-theme/blob/main/universiteit-utrecht-logo.png?raw=true"
     incremental: false
 bibliography: pred_int.bib
 ---
@@ -134,7 +134,6 @@ __Multiple imputation produces prediction intervals that yield nominal coverage 
 - Other (conformal) approaches [e.g., @zaffran_conformal_2023; @zaffran_predictive_2024] assume MCAR and require very large samples.
 
 - More research is needed to test our method beyond linear regression.
-
 :::
 
 
